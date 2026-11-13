@@ -31,10 +31,19 @@ jobs:
         with:
           gradle-version: '8.9'
 
+      
       - name: Extract project
         run: |
-          mkdir project
-          unzip -q CubeFlip_Android_Project.zip -d project
+          mkdir -p project
+          ZIP_FILE=$(find . -type f -iname "*.zip" -print -quit)
+          if [ -z "$ZIP_FILE" ]; then
+            echo "ZIP file not found!"
+            find . -maxdepth 3 -type f
+            exit 1
+          fi
+          echo "Found: $ZIP_FILE"
+          unzip -q "$ZIP_FILE" -d project
+          
 
       - name: Build APK
         run: |
